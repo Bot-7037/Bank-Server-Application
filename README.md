@@ -9,7 +9,6 @@ ___
 ___
 
 ## Project Structure
-### Branches
 
 ```mermaid
   graph LR;
