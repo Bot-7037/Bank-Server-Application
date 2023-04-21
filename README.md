@@ -15,13 +15,13 @@ ___
   graph LR;
     A[Bank Application]-->B[Standalone Applications]
     A-->C[Server Application]
-    subgraph Meant to be run on single machine
       B--->E(BankAppCollections)
       B--->F(BankAppJDBC)
       B--->G(BankAppJPA)
       B--->H(BankAppSpringJPA)
-    end
-    subgraph Meant serve client requests on a server
       C--->I(BankAppSpringBoot)
-    end
 ```
+
+### How to run
+
+- Switch to the respective branch and follow the detailed instructions
