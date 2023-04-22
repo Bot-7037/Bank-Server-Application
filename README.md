@@ -21,6 +21,6 @@ ___
       C--->I(BankAppSpringBoot)
 ```
 
-### How to run
+## How to run
 
 - Switch to the respective branch and follow the detailed instructions
