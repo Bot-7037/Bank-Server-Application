@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Main.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SpringJPA</a> &gt; <a href="index.source.html" class="el_package">com.cg.bankapp.main</a> &gt; <span class="el_source">Main.java</span></div><h1>Main.java</h1><pre class="source lang-java linenums">package com.cg.bankapp.main;
+
+import java.util.List;
+import java.util.Scanner;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.InputMismatchException;
+
+import com.cg.bankapp.utils.MenuConstants;
+import com.cg.bankapp.service.BankAppServices;
+import com.cg.bankapp.exceptions.LowBalanceException;
+import com.cg.bankapp.exceptions.SameAccountException;
+import com.cg.bankapp.exceptions.InvalidAmountException;
+import com.cg.actionhandler.ActionHandler;
+import com.cg.bankapp.entity.TransactionEntity;
+import com.cg.bankapp.exceptions.AccountNotFoundException;
+
+/**
+ * Main driver code
+ * 
+ * @author himanegi
+ *
+ */
+<span class="nc" id="L26">public class Main {</span>
+
+	static BankAppServices services;
+
+	static Scanner scanner;
+
+	@SuppressWarnings(&quot;resource&quot;)
+	public static void main(String[] args) {
+
+<span class="nc" id="L35">		ApplicationContext context = new ClassPathXmlApplicationContext(&quot;main-resources.xml&quot;);</span>
+<span class="nc" id="L36">		services = (BankAppServices) context.getBean(&quot;bankAppServicesImpl&quot;);</span>
+
+<span class="nc" id="L38">		scanner = new Scanner(System.in);</span>
+
+<span class="nc" id="L40">		System.out.println(MenuConstants.HEADING);</span>
+
+		int choice;
+
+		do {
+<span class="nc" id="L45">			printMenu();</span>
+			try {
+<span class="nc" id="L47">				choice = scanner.nextInt();</span>
+<span class="nc" id="L48">			} catch (InputMismatchException e) {</span>
+<span class="nc" id="L49">				System.err.println(&quot;Invalid Input&quot;);</span>
+<span class="nc" id="L50">				choice = -1;</span>
+<span class="nc" id="L51">				scanner.next();</span>
+<span class="nc" id="L52">				continue;</span>
+			}
+
+<span class="nc bnc" id="L55" title="All 7 branches missed.">			switch (choice) {</span>
+			case 1:
+<span class="nc" id="L57">				showBalance();</span>
+<span class="nc" id="L58">				break;</span>
+			case 2:
+<span class="nc" id="L60">				deposit();</span>
+<span class="nc" id="L61">				break;</span>
+			case 3:
+<span class="nc" id="L63">				withdraw();</span>
+<span class="nc" id="L64">				break;</span>
+			case 4:
+<span class="nc" id="L66">				fundTransfer();</span>
+<span class="nc" id="L67">				break;</span>
+			case 5:
+<span class="nc" id="L69">				showTransactions();</span>
+<span class="nc" id="L70">				break;</span>
+			case 6:
+<span class="nc" id="L72">				System.out.println(&quot;\n~ Thank You ~&quot;);</span>
+<span class="nc" id="L73">				break;</span>
+			default:
+<span class="nc" id="L75">				System.err.println(&quot;Invalid Choice&quot;);</span>
+			}
+<span class="nc bnc" id="L77" title="All 2 branches missed.">		} while (choice != 6);</span>
+
+<span class="nc" id="L79">		scanner.close();</span>
+<span class="nc" id="L80">	}</span>
+
+	static void printMenu() {
+<span class="nc" id="L83">		System.out.print(MenuConstants.MENU);</span>
+<span class="nc" id="L84">	}</span>
+
+	static void showBalance() {
+		int accountNumber;
+<span class="nc" id="L88">		System.out.print(&quot;\nEnter account number: &quot;);</span>
+		try {
+<span class="nc" id="L90">			accountNumber = scanner.nextInt();</span>
+<span class="nc" id="L91">		} catch (InputMismatchException e) {</span>
+<span class="nc" id="L92">			System.err.println(&quot;\nInvalid Input&quot;);</span>
+<span class="nc" id="L93">			scanner.next();</span>
+<span class="nc" id="L94">			return;</span>
+		}
+		try {
+<span class="nc" id="L97">			int balance = services.showBalance(accountNumber);</span>
+<span class="nc" id="L98">			System.out.println(MenuConstants.SHOWBALANCETOPBAR);</span>
+<span class="nc" id="L99">			System.out.println(&quot; Account balance: &quot; + balance + &quot;\t\t&quot;);</span>
+<span class="nc" id="L100">			System.out.println(MenuConstants.SHOWBALANCEBOTTOMBAR);</span>
+<span class="nc" id="L101">		} catch (AccountNotFoundException e) {</span>
+<span class="nc" id="L102">			ActionHandler.handle(e);</span>
+		}
+<span class="nc" id="L104">	}</span>
+
+	static void deposit() {
+		try {
+<span class="nc" id="L108">			System.out.print(&quot;\nEnter account number: &quot;);</span>
+<span class="nc" id="L109">			int account = scanner.nextInt();</span>
+
+<span class="nc" id="L111">			System.out.print(&quot;\nEnter amount to deposit: &quot;);</span>
+<span class="nc" id="L112">			int amount = scanner.nextInt();</span>
+<span class="nc" id="L113">			TransactionEntity transaction = services.deposit(account, amount);</span>
+<span class="nc" id="L114">			System.out.println(MenuConstants.DEPOSITTOPBAR);</span>
+<span class="nc" id="L115">			System.out.println(</span>
+<span class="nc" id="L116">					&quot;  Deposited : &quot; + transaction.getAmount() + &quot;   Balance : &quot; + transaction.getBalance() + &quot;\t\t&quot;);</span>
+<span class="nc" id="L117">			System.out.println(MenuConstants.DEPOSITBOTTOMBAR);</span>
+<span class="nc" id="L118">		} catch (InputMismatchException e) {</span>
+<span class="nc" id="L119">			System.err.println(&quot;\nInvalid Input&quot;);</span>
+<span class="nc" id="L120">			scanner.next();</span>
+<span class="nc" id="L121">		} catch (AccountNotFoundException | InvalidAmountException e) {</span>
+<span class="nc" id="L122">			ActionHandler.handle(e);</span>
+<span class="nc" id="L123">		} catch (Exception e) {</span>
+<span class="nc" id="L124">			System.out.println(e.getMessage());</span>
+		}
+<span class="nc" id="L126">	}</span>
+
+	static void withdraw() {
+		try {
+<span class="nc" id="L130">			System.out.print(&quot;\nEnter account number: &quot;);</span>
+<span class="nc" id="L131">			int account = scanner.nextInt();</span>
+<span class="nc" id="L132">			System.out.print(&quot;\nEnter amount to withdraw: &quot;);</span>
+<span class="nc" id="L133">			int amount = scanner.nextInt();</span>
+<span class="nc" id="L134">			TransactionEntity transaction = services.withdraw(account, amount);</span>
+<span class="nc" id="L135">			System.out.println(MenuConstants.WITHDRAWTOPBAR);</span>
+<span class="nc" id="L136">			System.out.println(</span>
+<span class="nc" id="L137">					&quot;  Withdrew : &quot; + transaction.getAmount() + &quot;   Balance : &quot; + transaction.getBalance() + &quot;\t\t\t&quot;);</span>
+<span class="nc" id="L138">			System.out.println(MenuConstants.WITHDRAWBOTTOMBAR);</span>
+<span class="nc" id="L139">		} catch (InputMismatchException e) {</span>
+<span class="nc" id="L140">			System.err.println(&quot;Invalid Input&quot;);</span>
+<span class="nc" id="L141">			scanner.next();</span>
+<span class="nc" id="L142">		} catch (InvalidAmountException | AccountNotFoundException | LowBalanceException e) {</span>
+<span class="nc" id="L143">			ActionHandler.handle(e);</span>
+<span class="nc" id="L144">		} catch (Exception e) {</span>
+<span class="nc" id="L145">			System.out.println(e.getMessage());</span>
+		}
+<span class="nc" id="L147">	}</span>
+
+	static void fundTransfer() {
+		int fromAccount;
+		int toAccount;
+		int amount;
+		try {
+<span class="nc" id="L154">			System.out.print(&quot;\nEnter source account number: &quot;);</span>
+<span class="nc" id="L155">			fromAccount = scanner.nextInt();</span>
+<span class="nc" id="L156">			System.out.print(&quot;\nEnter destination account: &quot;);</span>
+<span class="nc" id="L157">			toAccount = scanner.nextInt();</span>
+<span class="nc" id="L158">			System.out.print(&quot;\nEnter amount to transfer: &quot;);</span>
+<span class="nc" id="L159">			amount = scanner.nextInt();</span>
+<span class="nc" id="L160">		} catch (InputMismatchException e) {</span>
+<span class="nc" id="L161">			System.err.println(&quot;\nInvalid Input&quot;);</span>
+<span class="nc" id="L162">			scanner.next();</span>
+<span class="nc" id="L163">			return;</span>
+		}
+		try {
+<span class="nc" id="L166">			TransactionEntity transaction = services.fundTransfer(fromAccount, toAccount, amount);</span>
+<span class="nc" id="L167">			System.out.println(MenuConstants.FUNDTRANSFERTOPBAR);</span>
+<span class="nc" id="L168">			System.out.println(&quot;  Transferred : &quot; + transaction.getAmount() + &quot; to account : &quot; + toAccount</span>
+<span class="nc" id="L169">					+ &quot;    Final Balance : &quot; + transaction.getBalance() + &quot;   \t&quot;);</span>
+<span class="nc" id="L170">			System.out.println(MenuConstants.FUNDTRANSFERBOTTOMBAR);</span>
+<span class="nc" id="L171">		} catch (InvalidAmountException | AccountNotFoundException | LowBalanceException | SameAccountException e) {</span>
+<span class="nc" id="L172">			ActionHandler.handle(e);</span>
+<span class="nc" id="L173">		} catch (Exception e) {</span>
+<span class="nc" id="L174">			System.out.println(e.getMessage());</span>
+		}
+<span class="nc" id="L176">	}</span>
+
+	static void showTransactions() {
+		try {
+<span class="nc" id="L180">			System.out.print(&quot;\nEnter account number: &quot;);</span>
+<span class="nc" id="L181">			int accountNumber = scanner.nextInt();</span>
+<span class="nc" id="L182">			List&lt;TransactionEntity&gt; transactionList = services.showTransactions(accountNumber);</span>
+<span class="nc" id="L183">			System.out.println(MenuConstants.TRANSACTIONTOPBAR);</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">			for (TransactionEntity transaction : transactionList) {</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">				if (transaction != null)</span>
+<span class="nc" id="L186">					System.out.println(transaction);</span>
+			}
+
+<span class="nc" id="L189">			System.out.println(MenuConstants.TRANSACTIONBOTTOMBAR);</span>
+<span class="nc" id="L190">		} catch (InputMismatchException e) {</span>
+<span class="nc" id="L191">			System.err.println(&quot;\nInvalid Input&quot;);</span>
+<span class="nc" id="L192">			scanner.next();</span>
+<span class="nc" id="L193">		} catch (AccountNotFoundException e) {</span>
+<span class="nc" id="L194">			ActionHandler.handle(e);</span>
+<span class="nc" id="L195">		} catch (Exception e) {</span>
+<span class="nc" id="L196">			System.out.println(e.getMessage());</span>
+		}
+<span class="nc" id="L198">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

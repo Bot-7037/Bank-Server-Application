@@ -1,0 +1,13 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+SpringJPA,com.cg.bankapp.service,BankAppServicesImpl,6,222,0,12,0,57,1,13,1,7
+SpringJPA,com.cg.bankapp.entity,TransactionType,0,34,0,0,0,2,0,1,0,1
+SpringJPA,com.cg.bankapp.entity,AccountEntity,7,63,0,0,3,25,2,11,2,11
+SpringJPA,com.cg.bankapp.entity,TransactionEntity,0,71,0,0,0,21,0,14,0,14
+SpringJPA,com.cg.bankapp.entity,CustomerEntity,6,20,0,0,2,10,2,4,2,4
+SpringJPA,com.cg.bankapp.main,Main,346,0,13,0,114,0,17,0,8,0
+SpringJPA,com.cg.bankapp.dao,BankAppDAOImpl,20,91,1,7,7,26,1,8,0,5
+SpringJPA,com.cg.bankapp.utils,MenuConstants,6,0,0,0,2,0,1,0,1,0
+SpringJPA,com.cg.bankapp.exceptions,LowBalanceException,2,4,0,0,1,2,1,1,1,1
+SpringJPA,com.cg.bankapp.exceptions,InvalidAmountException,2,4,0,0,1,2,1,1,1,1
+SpringJPA,com.cg.bankapp.exceptions,SameAccountException,2,4,0,0,1,2,1,1,1,1
+SpringJPA,com.cg.bankapp.exceptions,AccountNotFoundException,2,4,0,0,1,2,1,1,1,1
