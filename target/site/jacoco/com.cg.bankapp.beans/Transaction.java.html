@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Transaction.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BankAppSpringBoot</a> &gt; <a href="index.source.html" class="el_package">com.cg.bankapp.beans</a> &gt; <span class="el_source">Transaction.java</span></div><h1>Transaction.java</h1><pre class="source lang-java linenums">package com.cg.bankapp.beans;
+
+import java.time.LocalDateTime;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+//Transaction entity to store and persist transactions in database
+@Entity
+@Table(name = &quot;transaction&quot;)
+<span class="fc" id="L19">public class Transaction {</span>
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int transactionId;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = &quot;accountNumber&quot;)
+	private Account account;
+
+	private double amount;
+	private double balance;
+
+	@CreationTimestamp
+	private LocalDateTime transactionDate;
+	private TransactionType transactionType;
+
+	public int getTransactionId() {
+<span class="nc" id="L37">		return transactionId;</span>
+	}
+
+	public void setTransactionId(int transactionId) {
+<span class="fc" id="L41">		this.transactionId = transactionId;</span>
+<span class="fc" id="L42">	}</span>
+
+	public Account getAccount() {
+<span class="nc" id="L45">		return account;</span>
+	}
+
+	public void setAccount(Account account) {
+<span class="fc" id="L49">		this.account = account;</span>
+<span class="fc" id="L50">	}</span>
+
+	public TransactionType getTransactionType() {
+<span class="nc" id="L53">		return transactionType;</span>
+	}
+
+	public double getBalance() {
+<span class="fc" id="L57">		return balance;</span>
+	}
+
+	public void setBalance(double balance) {
+<span class="fc" id="L61">		this.balance = balance;</span>
+<span class="fc" id="L62">	}</span>
+
+	public void setTransactionType(TransactionType transactionType) {
+<span class="fc" id="L65">		this.transactionType = transactionType;</span>
+<span class="fc" id="L66">	}</span>
+
+	public void setAmount(double amount) {
+<span class="fc" id="L69">		this.amount = amount;</span>
+<span class="fc" id="L70">	}</span>
+
+	public double getAmount() {
+<span class="nc" id="L73">		return this.amount;</span>
+	}
+
+	public LocalDateTime getTransactionDate() {
+<span class="nc" id="L77">		return this.transactionDate;</span>
+	}
+
+	public void setTransactionDate(LocalDateTime transactionDate) {
+<span class="fc" id="L81">		this.transactionDate = transactionDate;</span>
+<span class="fc" id="L82">	}</span>
+
+	@Override
+	public String toString() {
+<span class="nc" id="L86">		return String.format(</span>
+<span class="nc" id="L87">				&quot;Transaction [transactionId=%s, account=%s, amount=%s, balance=%s, transactionDate=%s, transactionType=%s]&quot;,</span>
+<span class="nc" id="L88">				transactionId, account.getAccountNumber(), amount, balance, transactionDate, transactionType);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

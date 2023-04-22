@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BankAppController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">BankAppSpringBoot</a> &gt; <a href="index.source.html" class="el_package">com.cg.bankapp.controllers</a> &gt; <span class="el_source">BankAppController.java</span></div><h1>BankAppController.java</h1><pre class="source lang-java linenums">package com.cg.bankapp.controllers;
+
+import static java.util.Map.entry;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.cg.bankapp.beans.Transaction;
+import com.cg.bankapp.exceptions.AccountNotFoundException;
+import com.cg.bankapp.exceptions.InvalidAmountException;
+import com.cg.bankapp.exceptions.LowBalanceException;
+import com.cg.bankapp.exceptions.SameAccountException;
+import com.cg.bankapp.services.BankService;
+
+/**
+ * Rest Controller to handle the GET and POST requests from client
+ * 
+ * @author himanegi
+ *
+ */
+@RestController
+<span class="fc" id="L34">public class BankAppController {</span>
+	@Autowired
+	private BankService service;
+
+	/**
+	 * test the application saying hello
+	 * 
+	 * @return ResponseEntity
+	 */
+	@GetMapping(&quot;/welcome&quot;)
+	public ResponseEntity&lt;String&gt; sayHello() {
+<span class="fc" id="L45">		return new ResponseEntity&lt;&gt;(&quot;Welcome to bank server api&quot;, HttpStatus.OK);</span>
+	}
+
+	/**
+	 * get balance of a user from database
+	 * 
+	 * @param id
+	 * @return ResponseEntity
+	 */
+	@GetMapping(path = &quot;/showBalance/{id}&quot;, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity&lt;Map&lt;String, Double&gt;&gt; showBalance(@PathVariable int id) throws AccountNotFoundException {
+		try {
+<span class="fc" id="L57">			Double balance = service.showBalace(id);</span>
+<span class="fc" id="L58">			return new ResponseEntity&lt;&gt;(Collections.singletonMap(&quot;balance&quot;, balance), HttpStatus.OK);</span>
+<span class="nc" id="L59">		} catch (AccountNotFoundException e) {</span>
+<span class="nc" id="L60">			throw e;</span>
+<span class="nc" id="L61">		} catch (Exception e) {</span>
+<span class="nc" id="L62">			e.printStackTrace();</span>
+<span class="nc" id="L63">			return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+		}
+	}
+
+	/**
+	 * Get last 10 transactions from the database
+	 * 
+	 * @param id
+	 * @return ResponseEntity&lt;Transaction&gt;
+	 * @throws AccountNotFoundException
+	 */
+	@GetMapping(path = &quot;/showLastTransactions/{id}&quot;, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity&lt;Map&lt;Integer, Map&lt;String, Object&gt;&gt;&gt; showLastTransactions(@PathVariable int id)
+			throws AccountNotFoundException {
+		try {
+<span class="nc" id="L78">			List&lt;Transaction&gt; transactions = service.showLastTransactions(id);</span>
+
+<span class="nc" id="L80">			Map&lt;Integer, Map&lt;String, Object&gt;&gt; allTransactions = new HashMap&lt;&gt;();</span>
+
+<span class="nc bnc" id="L82" title="All 2 branches missed.">			for (Transaction transaction : transactions) {</span>
+<span class="nc" id="L83">				allTransactions.put(transaction.getTransactionId(),</span>
+<span class="nc" id="L84">						Map.ofEntries(entry(&quot;accountNumber&quot;, transaction.getAccount().getAccountNumber()),</span>
+<span class="nc" id="L85">								entry(&quot;transactionDate&quot;, transaction.getTransactionDate()),</span>
+<span class="nc" id="L86">								entry(&quot;amount&quot;, transaction.getAmount()), entry(&quot;balance&quot;, transaction.getBalance()),</span>
+<span class="nc" id="L87">								entry(&quot;transactionType&quot;, transaction.getTransactionType())));</span>
+			}
+<span class="nc" id="L89">			return new ResponseEntity&lt;&gt;(allTransactions, HttpStatus.OK);</span>
+<span class="nc" id="L90">		} catch (AccountNotFoundException e) {</span>
+<span class="nc" id="L91">			throw e;</span>
+<span class="nc" id="L92">		} catch (Exception e) {</span>
+<span class="nc" id="L93">			e.printStackTrace();</span>
+<span class="nc" id="L94">			return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+		}
+	}
+
+	/**
+	 * Function to withdraw money from an account
+	 * 
+	 * @param input
+	 * @return ResponseEntity&lt;Balance&gt;
+	 * @throws Exception
+	 */
+	@PostMapping(value = &quot;/withdrawMoney&quot;, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity&lt;Map&lt;String, Double&gt;&gt; withdrawMoney(@RequestBody Map&lt;String, String&gt; input) throws Exception {
+<span class="fc" id="L107">		int accountNumber = Integer.parseInt(input.get(&quot;accountNumber&quot;));</span>
+<span class="fc" id="L108">		double amount = Double.parseDouble(input.get(&quot;amount&quot;));</span>
+<span class="fc" id="L109">		double balance = 0.0;</span>
+
+		try {
+<span class="fc" id="L112">			balance = service.withdrawAmount(accountNumber, amount);</span>
+<span class="fc" id="L113">			return new ResponseEntity&lt;&gt;(Collections.singletonMap(&quot;balance&quot;, balance), HttpStatus.OK);</span>
+<span class="nc" id="L114">		} catch (LowBalanceException | AccountNotFoundException | InvalidAmountException e) {</span>
+<span class="nc" id="L115">			throw e;</span>
+<span class="nc" id="L116">		} catch (Exception e) {</span>
+<span class="nc" id="L117">			e.printStackTrace();</span>
+<span class="nc" id="L118">			return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+		}
+	}
+
+	/**
+	 * Function to deposit money to an account
+	 * 
+	 * @param input
+	 * @return ResponseEntity&lt;Balance&gt;
+	 * @throws Exception 
+	 */
+	@PostMapping(value = &quot;/depositMoney&quot;, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity&lt;Map&lt;String, Double&gt;&gt; depositMoney(@RequestBody Map&lt;String, String&gt; input) throws Exception {
+<span class="fc" id="L131">		int accountNumber = Integer.parseInt(input.get(&quot;accountNumber&quot;));</span>
+<span class="fc" id="L132">		double amount = Integer.parseInt(input.get(&quot;amount&quot;));</span>
+		Double balance;
+
+		try {
+<span class="fc" id="L136">			balance = service.depositAmount(accountNumber, amount);</span>
+<span class="fc" id="L137">			return new ResponseEntity&lt;&gt;(Collections.singletonMap(&quot;balance&quot;, balance), HttpStatus.OK);</span>
+<span class="nc" id="L138">		} catch (AccountNotFoundException | InvalidAmountException e) {</span>
+<span class="nc" id="L139">			throw e;</span>
+<span class="nc" id="L140">		} catch (Exception e) {</span>
+<span class="nc" id="L141">			System.err.println(e.getMessage());</span>
+<span class="nc" id="L142">			return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+		}
+	}
+
+	/**
+	 * Function to transfer money to another account
+	 * 
+	 * @param input
+	 * @return ResposeEntity&lt;Balance&gt;
+	 * @throws Exception 
+	 */
+	@PostMapping(value = &quot;/fundTransfer&quot;, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity&lt;Map&lt;String, Double&gt;&gt; fundTransfer(@RequestBody Map&lt;String, String&gt; input) throws Exception {
+<span class="fc" id="L155">		int recieverAccount = Integer.parseInt(input.get(&quot;recieverAccount&quot;));</span>
+<span class="fc" id="L156">		int senderAccount = Integer.parseInt(input.get(&quot;senderAccount&quot;));</span>
+<span class="fc" id="L157">		double amount = Integer.parseInt(input.get(&quot;amount&quot;));</span>
+<span class="fc" id="L158">		double balance = 0.0;</span>
+
+		try {
+<span class="fc" id="L161">			balance = service.fundTransfer(senderAccount, recieverAccount, amount);</span>
+<span class="fc" id="L162">			return new ResponseEntity&lt;&gt;(Collections.singletonMap(&quot;balance&quot;, balance), HttpStatus.OK);</span>
+<span class="nc" id="L163">		} catch (LowBalanceException | AccountNotFoundException | InvalidAmountException | SameAccountException e) {</span>
+<span class="nc" id="L164">			throw e;</span>
+<span class="nc" id="L165">		} catch (Exception e) {</span>
+<span class="nc" id="L166">			e.printStackTrace();</span>
+<span class="nc" id="L167">			return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+		}
+
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

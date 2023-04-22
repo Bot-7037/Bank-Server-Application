@@ -1,0 +1,14 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+BankAppSpringBoot,com.cg.bankapp.services,BankServiceImpl,15,303,3,19,3,66,3,14,0,6
+BankAppSpringBoot,com.cg.bankapp.beans,Transaction,55,30,0,0,8,14,6,8,6,8
+BankAppSpringBoot,com.cg.bankapp.beans,Account,58,39,0,0,15,15,8,6,8,6
+BankAppSpringBoot,com.cg.bankapp.beans,TransactionType,0,34,0,0,0,4,0,1,0,1
+BankAppSpringBoot,com.cg.bankapp.beans,Customer,14,12,0,0,6,6,4,2,4,2
+BankAppSpringBoot,com.cg.bankapp.handler,Handler,24,3,0,0,4,1,4,1,4,1
+BankAppSpringBoot,com.cg.bankapp.controllers,BankAppController,131,117,2,0,34,19,2,6,1,6
+BankAppSpringBoot,com.cg.bankapp.config,BankAppSwaggerConfig,0,66,0,0,0,10,0,4,0,4
+BankAppSpringBoot,com.cg.bankapp,Main,5,3,0,0,2,1,1,1,1,1
+BankAppSpringBoot,com.cg.bankapp.exceptions,LowBalanceException,3,4,0,0,2,2,1,1,1,1
+BankAppSpringBoot,com.cg.bankapp.exceptions,InvalidAmountException,3,4,0,0,2,2,1,1,1,1
+BankAppSpringBoot,com.cg.bankapp.exceptions,SameAccountException,7,0,0,0,4,0,2,0,2,0
+BankAppSpringBoot,com.cg.bankapp.exceptions,AccountNotFoundException,3,4,0,0,2,2,1,1,1,1

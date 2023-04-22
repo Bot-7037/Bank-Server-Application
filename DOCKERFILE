@@ -1,0 +1,4 @@
+FROM adoptopenjdk/openjdk11
+COPY BankApplicationSpringBoot.jar BankApplicationSpringBoot.jar
+EXPOSE 8086
+ENTRYPOINT ["java","-jar","/BankApplicationSpringBoot.jar"]
