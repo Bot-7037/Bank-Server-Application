@@ -13,7 +13,7 @@ ___
 ```mermaid
   graph LR;
     A[Bank Application]-->B[Standalone Applications]
-    A-->C[Server Application]
+    A-->C["Server Application (final)"]
       B--->E(BankAppCollections)
       B--->F(BankAppJDBC)
       B--->G(BankAppJPA)
