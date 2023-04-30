@@ -1,10 +1,14 @@
 # Collections
-### Banking Application Using Collections
+### Banking Application using Collections
 
 ## How to run
-- Ensure JDK 11 has been set-up on the local system
-- Clone the branch `BankAppCollections` into local system
+### Requirements
+- JDK 11
+- Apache Maven
+### Steps
+- Clone the branch into local system using
   ```
-  git clone --branch BankAppCollections https://github.com/Bot-7037/Bank-Server-Application.git
+  got clone --brach BankAppJDBC https://github.com/Bot-7037/Bank-Server-Application.git
   ```
-- Run the `src/main/java/com/cg/bankapplication/main/Main.java` file
+- Install the dependencies using `mvn install`
+- Run the `/src/main/java/com/cg/bankapp/main/Main.java`
