@@ -15,7 +15,7 @@
   git clone --brach BankAppSpringJPA https://github.com/Bot-7037/Bank-Server-Application.git
   ```
 - Set up the database and application properties under `/src/main/resources/application-dev.properties` for example
-  ```
+  ```properties
   server.port=9999
 
   server.servlet.context-path=/bankapp
@@ -49,3 +49,17 @@
       <details><summary><i>Withdraw Money</i></summary><code>localhost:9999/bankapp/withdrawMoney/</code></details>
       <details><summary><i>Fund Transfe</i>r</summary><code>localhost:9999/bankapp/fundTransfer</code></details>
   </details>
+
+### Running on Docker
+- Create a package of your application using `mvn install`. The package (.jar) file will be created inside the `/target` folder
+- Go to [Play With Docker](https://labs.play-with-docker.com/) 
+- Create an instance
+- Upload the package (.jar) file, DOCKERFILE, and docker-compose.yml onto the instance
+- Build the application using
+  ```
+  docker compose up --build -d
+  ```
+  OR
+  ```
+  docker compose up --build
+  ```
