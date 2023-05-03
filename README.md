@@ -39,22 +39,60 @@
 - Send the required requests to the application using Postman or SwaggerUI
 ### Sending Requests
 - **SwaggerUI** : https://localhost:9999/bankapp/swagger-ui.html
-- **Postman**:
-  <details><summary><strong>GET</strong></summary><br>
-      <details><summary><i>Show Balance</i></summary><code>localhost:9999/bankapp-dev/showBalance/1</code></details>
-      <details><summary><i>Get Last Transactions</i></summary><code>localhost:9999/bankapp/showLastTransactions/1</code></details>
-  </details>
-  <details><summary><strong>POST</strong></summary><br>
-      <details><summary><i>Deposit Money</i></summary><code>localhost:9999/bankapp/depositMoney/</code></details>
-      <details><summary><i>Withdraw Money</i></summary><code>localhost:9999/bankapp/withdrawMoney/</code></details>
-      <details><summary><i>Fund Transfe</i>r</summary><code>localhost:9999/bankapp/fundTransfer</code></details>
-  </details>
+- **Postman**: https://web.postman.com
+
+### Requests Format:
+#### GET
+
+- `localhost:9999/bankapp/show Balance/{id}` : get balance of an account
+- `localhost:9999/bankapp/getLastTransactions/{id}` : get last 10 transactions of an account
+    
+
+#### POST
+
+- `localhost:9999/bankapp/depositMoney`
+    
+
+``` json
+{
+    "accountNumber" : "{accountNumber}",
+    "amount" : "{amount}"
+}
+
+```
+
+- `localhost:9999/bankapp/withdrawMoney`
+    
+
+``` json
+{
+    "accountNumber" : "{accountNumber}",
+    "amount" : "{amount}"
+}
+
+```
+
+- `localhost:9999/bankapp/fundTransfer`
+    
+
+``` json
+{
+    "senderAccount" : "{accountNumber}",
+    "recieverAccount" : {"accountNumber"},
+    "amount" : "{amount}"
+}
+
+```
+
+
+
 
 ### Running on Docker
-- Create a package of your application using `mvn install`. The package (.jar) file will be created inside the `/target` folder
+- Create a package of your application using `mvn install`. 
+- Locate the package (.jar) file inside `/target` folder
 - Go to [Play With Docker](https://labs.play-with-docker.com/) 
 - Create an instance
-- Upload the package (.jar) file, DOCKERFILE, and docker-compose.yml onto the instance
+- Upload the package (.jar) file, `DOCKERFILE`, and `docker-compose.yml` onto the instance
 - Build the application using
   ```
   docker compose up --build -d
