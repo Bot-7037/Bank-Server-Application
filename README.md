@@ -12,7 +12,7 @@
 - Create a database using workbench/command-line (The application will try to connect to this database)
 - Clone the branch into local system using
   ```
-  git clone --brach BankAppSpringJPA https://github.com/Bot-7037/Bank-Server-Application.git
+  git clone --brach BankAppSpringJPA https://github.com/hmmmanshu/Bank-Server-Application.git
   ```
 - Set up the database and application properties under `/src/main/resources/application-dev.properties` for example
   ```properties
